@@ -14,6 +14,7 @@
 import NarBar from "components/common/navbar/NavBar"
 import HomeSwiper from "views/home/childcomps/HomeSwiper"
 
+import {getHomeMultidata} from 'network/home'
 export default {
   name: "Home",
   components: {
@@ -87,8 +88,23 @@ export default {
         ],
         nextPage: 1,
       },
+      bannersList: [],
+      recommends:[]
     };
   },
+  methods:{
+    getHomeMultidata() {
+      getHomeMultidata().then(res => {
+        console.log(res);
+        this.bannersList = res.data.banner.list;
+        this.recommends = res.data.recommend.list;
+        console.log(this.bannersList)
+      })
+    }
+  },
+  created() {
+    this.getHomeMultidata()
+  }
 };
 </script>
 
