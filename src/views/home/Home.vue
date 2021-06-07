@@ -4,8 +4,14 @@
       <div slot="center">购物街</div>
     </nar-bar>
 
-    <scroll :pullUpLoad="true"
-    @pullingUp="pullingup">
+    <scroll
+      :pullUpLoad="true"
+      @pullingUp="pullingup"
+      :probeType="3"
+      class="content"
+      @scroll="scroll"
+      ref="scroll"
+    >
       <home-swiper :banners="bannersList"></home-swiper>
       <Recommend :recommend="recommendsList"></Recommend>
       <feature></feature>
@@ -16,6 +22,8 @@
       ></tar-control>
       <Goods :goodsList="pushData"></Goods>
     </scroll>
+
+    <BackTop class="backtop" @click.native="clicktop" v-show="isShow"></BackTop>
   </div>
 </template>
 
@@ -27,6 +35,7 @@ import Feature from "views/home/childcomps/Feature";
 import TarControl from "components/content/tarcontrol/TarControl";
 import Goods from "components/content/goods/Goods";
 import Scroll from "components/common/scroll/Scroll";
+import BackTop from "components/content/backtop/BackTop";
 
 import { getHomeMultidata, getHomeGoods } from "network/home";
 export default {
@@ -39,6 +48,7 @@ export default {
     TarControl,
     Goods,
     Scroll,
+    BackTop,
   },
   data() {
     return {
@@ -134,6 +144,7 @@ export default {
         sell: { page: 0, list: [] },
       },
       current: "pop",
+      isShow: false,
     };
   },
   methods: {
@@ -166,14 +177,19 @@ export default {
       getHomeGoods(type, page).then((res) => {
         this.goods[type].list.push(...res.data.list);
         this.goods[type].page += 1;
-        console.log(this.goods);
+        this.$refs.scroll.finishPullUp();
       });
     },
 
     pullingup() {
-      console.log('pullingup');
-      this.getHomeGoods(this.current)
-    }
+      this.getHomeGoods(this.current);
+    },
+    scroll(position) {
+      -position.y > 1000 ? (this.isShow = true) : (this.isShow = false);
+    },
+    clicktop() {
+      this.$refs.scroll.scrollTo(0, 0);
+    },
   },
   created() {
     this.getHomeMultidata();
@@ -192,7 +208,7 @@ export default {
 
 <style scoped>
 #home {
-  padding-top: 44px;
+  height: 100vh;
 }
 .home-nav {
   background-color: var(--color-tint);
@@ -207,5 +223,10 @@ export default {
 .tarcontrol {
   position: sticky;
   top: 44px;
+}
+.content {
+  height: calc(100% - 93px);
+  overflow: hidden;
+  margin-top: 44px;
 }
 </style>
