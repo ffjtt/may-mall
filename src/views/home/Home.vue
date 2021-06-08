@@ -4,6 +4,14 @@
       <div slot="center">购物街</div>
     </nar-bar>
 
+    <tar-control 
+    class="tarcontrol"
+        :title="['流行', '新款', '爆款']"
+        @tarChange="tarChange"
+        v-show="tarControlShow"
+        ref="tarcontrol2"
+      ></tar-control>
+
     <scroll
       :pullUpLoad="true"
       @pullingUp="pullingup"
@@ -12,13 +20,13 @@
       @scroll="scroll"
       ref="scroll"
     >
-      <home-swiper :banners="bannersList"></home-swiper>
+      <home-swiper :banners="bannersList" @simgLoad="simgLoad"></home-swiper>
       <Recommend :recommend="recommendsList"></Recommend>
       <feature></feature>
       <tar-control
-        class="tarcontrol"
         :title="['流行', '新款', '爆款']"
         @tarChange="tarChange"
+        ref="tarcontrol1"
       ></tar-control>
       <Goods :goodsList="pushData"></Goods>
     </scroll>
@@ -38,6 +46,7 @@ import Scroll from "components/common/scroll/Scroll";
 import BackTop from "components/content/backtop/BackTop";
 
 import { getHomeMultidata, getHomeGoods } from "network/home";
+import {debounce} from 'common/utils'
 export default {
   name: "Home",
   components: {
@@ -145,6 +154,8 @@ export default {
       },
       current: "pop",
       isShow: false,
+      tarControlShow: false,
+      offsetTop:0
     };
   },
   methods: {
@@ -163,13 +174,15 @@ export default {
           break;
         }
       }
+      this.$refs.tarcontrol1.currentIndex = index
+      this.$refs.tarcontrol2.currentIndex = index
     },
     getHomeMultidata() {
       getHomeMultidata().then((res) => {
-        //console.log(res);
+
         this.banners = res.data.banner.list;
         this.recommends = res.data.recommend.list;
-        //console.log(this.bannersList);
+
       });
     },
     getHomeGoods(type) {
@@ -185,18 +198,31 @@ export default {
       this.getHomeGoods(this.current);
     },
     scroll(position) {
-      -position.y > 1000 ? (this.isShow = true) : (this.isShow = false);
+      this.isShow = -position.y > 1000
+      this.tarControlShow = -position.y > this.offsetTop
+
     },
     clicktop() {
       this.$refs.scroll.scrollTo(0, 0);
     },
+
+    simgLoad() {
+      this.offsetTop = this.$refs.tarcontrol1.$el.offsetTop
+    }
   },
   created() {
     this.getHomeMultidata();
-
     this.getHomeGoods("pop");
     this.getHomeGoods("new");
     this.getHomeGoods("sell");
+
+  },
+  mounted() {
+    const refresh = debounce(this.$refs.scroll.refresh,50)
+    this.$bus.$on("imgLoad",() => {
+      refresh()
+    })
+
   },
   computed: {
     pushData() {
@@ -209,24 +235,31 @@ export default {
 <style scoped>
 #home {
   height: 100vh;
+  position: relative;
 }
 .home-nav {
   background-color: var(--color-tint);
   color: #fff;
 
-  position: fixed;
+  /* position: fixed;
   right: 0;
   left: 0;
   top: 0;
-  z-index: 9;
+  z-index: 9; */
 }
 .tarcontrol {
-  position: sticky;
-  top: 44px;
+  position: relative;
+  z-index: 9;
 }
 .content {
-  height: calc(100% - 93px);
+  /* height: calc(100% - 93px);
   overflow: hidden;
-  margin-top: 44px;
+  margin-top: 44px; */
+  overflow: hidden;
+  position: absolute;
+  top: 44px;
+  bottom: 49px;
+  left: 0;
+  right: 0;
 }
 </style>
