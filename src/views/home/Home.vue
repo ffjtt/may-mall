@@ -155,7 +155,8 @@ export default {
       current: "pop",
       isShow: false,
       tarControlShow: false,
-      offsetTop:0
+      offsetTop:0,
+      saveY:0
     };
   },
   methods: {
@@ -209,6 +210,13 @@ export default {
     simgLoad() {
       this.offsetTop = this.$refs.tarcontrol1.$el.offsetTop
     }
+  },
+  activated() {
+    this.$refs.scroll.scrollTo(0, this.saveY, 0);
+    this.$refs.scroll.refresh();
+  },
+  deactivated() {
+    this.saveY = this.$refs.scroll.getScrollY();
   },
   created() {
     this.getHomeMultidata();

@@ -52,8 +52,10 @@ export default {
       this.scroll.finishPullUp();
     },
     refresh() {
-      console.log('jjjjjjjj');
       this.scroll.refresh()
+    },
+    getScrollY() {
+      return this.scroll ? this.scroll.y : 0;
     }
   },
 };
