@@ -47,6 +47,7 @@ import BackTop from "components/content/backtop/BackTop";
 
 import { getHomeMultidata, getHomeGoods } from "network/home";
 import {debounce} from 'common/utils'
+import {mixin} from 'common/mixin'
 export default {
   name: "Home",
   components: {
@@ -59,6 +60,7 @@ export default {
     Scroll,
     BackTop,
   },
+  mixins:[mixin],
   data() {
     return {
       bannersList: [
@@ -156,7 +158,8 @@ export default {
       isShow: false,
       tarControlShow: false,
       offsetTop:0,
-      saveY:0
+      saveY:0,
+      //newRefresh:null
     };
   },
   methods: {
@@ -212,11 +215,14 @@ export default {
     }
   },
   activated() {
+    ///有问题
+    //this.$bus.$on("imgLoad",this.newRefresh)
     this.$refs.scroll.scrollTo(0, this.saveY, 0);
-    this.$refs.scroll.refresh();
   },
   deactivated() {
+    ///有问题
     this.saveY = this.$refs.scroll.getScrollY();
+    this.$bus.$off("imgLoad",this.newRefresh)
   },
   created() {
     this.getHomeMultidata();
@@ -226,11 +232,13 @@ export default {
 
   },
   mounted() {
-    const refresh = debounce(this.$refs.scroll.refresh,50)
-    this.$bus.$on("imgLoad",() => {
-      refresh()
-    })
-
+    //混入
+    // const refresh = debounce(this.$refs.scroll.refresh,50)
+    // this.newRefresh = () => {
+    //   console.log('home调用refresh')
+    //   refresh()
+    // }
+    // this.$bus.$on("imgLoad",this.newRefresh)
   },
   computed: {
     pushData() {

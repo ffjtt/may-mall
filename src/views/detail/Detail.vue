@@ -6,8 +6,13 @@
       <DetailSwiper :images="topImages" @refresh="Torefresh"></DetailSwiper>
       <DetailInfo :goods="goods"></DetailInfo>
       <DetailShopInfo :shop="shop"></DetailShopInfo>
-      <DetailGoodsInfo :detailInfo='detailInfo' @imgLoad='Torefresh'></DetailGoodsInfo>
-      <DetailParamInfo :paramInfo='paramInfo'></DetailParamInfo>
+      <DetailGoodsInfo
+        :detailInfo="detailInfo"
+        @GimgLoad="Grefresh"
+      ></DetailGoodsInfo>
+      <DetailParamInfo :paramInfo="paramInfo"></DetailParamInfo>
+      <DetailCommentInfo :commentInfo="commentInfo" ></DetailCommentInfo>
+      <GoodsList :goodsList="recommends"></GoodsList>
     </scroll>
   </div>
 </template>
@@ -17,10 +22,13 @@ import DetailNavBar from "views/detail/childcomps/DetailNavBar";
 import DetailSwiper from "views/detail/childcomps/DetailSwiper";
 import DetailInfo from "views/detail/childcomps/DetailInfo";
 import DetailShopInfo from "./childcomps/DetailShopInfo";
-import DetailGoodsInfo from './childcomps/DetailGoodsInfo'
-import DetailParamInfo from  './childcomps/DetailParamInfo'
+import DetailGoodsInfo from "./childcomps/DetailGoodsInfo";
+import DetailParamInfo from "./childcomps/DetailParamInfo";
+import DetailCommentInfo from "./childcomps/DetailCommentInfo";
 
 import Scroll from "components/common/scroll/Scroll";
+import GoodsList from "components/content/goods/Goods";
+import {mixin} from 'common/mixin'
 
 import {
   getDetail,
@@ -29,6 +37,7 @@ import {
   Shop,
   getRecommend,
 } from "network/detail";
+import { debounce } from "common/utils";
 
 export default {
   name: "Detail",
@@ -39,11 +48,14 @@ export default {
     DetailShopInfo,
     Scroll,
     DetailGoodsInfo,
-    DetailParamInfo
+    DetailParamInfo,
+    DetailCommentInfo,
+    GoodsList,
   },
+  mixins:[mixin],
   data() {
     return {
-       iid: null,
+      iid: null,
       topImages: [],
       goods: {},
       shop: {},
@@ -51,6 +63,8 @@ export default {
       paramInfo: {},
       commentInfo: {},
       recommends: [],
+      //newRefresh: null,
+      refresh:null
     };
   },
   created() {
@@ -88,12 +102,27 @@ export default {
       });
     });
   },
+  mounted() {
+    //混入
+    // const refresh = debounce(this.$refs.scroll.refresh, 50);
+    // this.newRefresh = () => {
+    //   console.log("detail调用refresh");
+    //   refresh();
+    // };
+    // this.$bus.$on("imgLoad", this.newRefresh);
+    this.refresh = debounce(this.$refs.scroll.refresh, 50);
+  },
+  destroyed() {
+    this.$bus.$off('imgLoad',this.newRefresh)
+  },
   methods: {
     Torefresh() {
-    console.log('111');
-    this.$refs.scroll.refresh()
-  }
-  }
+      this.$refs.scroll.refresh();
+    },
+    Grefresh() {
+      this.refresh()
+    }
+  },
 };
 </script>
 
