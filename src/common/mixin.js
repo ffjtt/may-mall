@@ -9,7 +9,16 @@ const mixin = {
   mounted() {
     const refresh = debounce(this.$refs.scroll.refresh, 50)
     this.newRefresh = () => {
-      console.log('home调用refresh')
+      this.$nextTick(() => {
+        if(this.$route.path.indexOf('detail') == 1) {
+          this.offsetTopList = []
+          this.offsetTopList.push(0)
+          this.offsetTopList.push(this.$refs.paramInfo.$el.offsetTop)
+          this.offsetTopList.push(this.$refs.commentInfo.$el.offsetTop)
+          this.offsetTopList.push(this.$refs.goodsList.$el.offsetTop)
+          this.offsetTopList.push(Number.MAX_VALUE)
+        }
+      }) 
       refresh()
     }
     this.$bus.$on("imgLoad", this.newRefresh)

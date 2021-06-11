@@ -1,8 +1,8 @@
 <template>
   <div id="detail">
-    <DetailNavBar class="d_navbar"></DetailNavBar>
+    <DetailNavBar class="d_navbar" @titleClick="titleClick" ref="navbar"></DetailNavBar>
 
-    <scroll class="content" ref="scroll">
+    <scroll class="content" ref="scroll" :probeType='3' @scroll="scrollPosition"> 
       <DetailSwiper :images="topImages" @refresh="Torefresh"></DetailSwiper>
       <DetailInfo :goods="goods"></DetailInfo>
       <DetailShopInfo :shop="shop"></DetailShopInfo>
@@ -10,10 +10,14 @@
         :detailInfo="detailInfo"
         @GimgLoad="Grefresh"
       ></DetailGoodsInfo>
-      <DetailParamInfo :paramInfo="paramInfo"></DetailParamInfo>
-      <DetailCommentInfo :commentInfo="commentInfo" ></DetailCommentInfo>
-      <GoodsList :goodsList="recommends"></GoodsList>
+      <DetailParamInfo :paramInfo="paramInfo" ref="paramInfo"></DetailParamInfo>
+      <DetailCommentInfo :commentInfo="commentInfo"  ref="commentInfo"></DetailCommentInfo>
+      <GoodsList :goodsList="recommends" ref="goodsList"></GoodsList>
+
     </scroll>
+
+  <BackTop class="backtop" @click.native="clicktop" v-show="isShow"></BackTop>
+  <DetailBottomBar></DetailBottomBar>
   </div>
 </template>
 
@@ -25,6 +29,8 @@ import DetailShopInfo from "./childcomps/DetailShopInfo";
 import DetailGoodsInfo from "./childcomps/DetailGoodsInfo";
 import DetailParamInfo from "./childcomps/DetailParamInfo";
 import DetailCommentInfo from "./childcomps/DetailCommentInfo";
+import BackTop from "components/content/backtop/BackTop";
+import DetailBottomBar from './childcomps/DetailBottomBar';
 
 import Scroll from "components/common/scroll/Scroll";
 import GoodsList from "components/content/goods/Goods";
@@ -51,6 +57,8 @@ export default {
     DetailParamInfo,
     DetailCommentInfo,
     GoodsList,
+    BackTop,
+    DetailBottomBar
   },
   mixins:[mixin],
   data() {
@@ -64,7 +72,10 @@ export default {
       commentInfo: {},
       recommends: [],
       //newRefresh: null,
-      refresh:null
+      refresh:null,
+      offsetTopList:[],
+      nowCurrentIndex:null,
+      isShow:false
     };
   },
   created() {
@@ -121,6 +132,22 @@ export default {
     },
     Grefresh() {
       this.refresh()
+    },
+    titleClick(index) {
+      console.log(this.offsetTopList[index]);
+      this.$refs.scroll.scrollTo(0,-this.offsetTopList[index],0)
+    },
+    scrollPosition(position) {
+      this.isShow = -position.y > 1000
+      for(let i = 0; i < this.offsetTopList.length-1; i++) {
+        if( (-position.y > this.offsetTopList[i] && -position.y < this.offsetTopList[i+1])) {
+
+          this.$refs.navbar.currentIndex = i
+        }
+      }
+    },
+    clicktop() {
+      this.$refs.scroll.scrollTo(0,0,0)
     }
   },
 };
@@ -139,7 +166,7 @@ export default {
   background-color: #fff;
 }
 .content {
-  height: calc(100% - 44px);
+  height: calc(100% - 44px - 58px);
   overflow: hidden;
 }
 </style>
