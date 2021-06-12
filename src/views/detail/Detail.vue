@@ -17,7 +17,7 @@
     </scroll>
 
   <BackTop class="backtop" @click.native="clicktop" v-show="isShow"></BackTop>
-  <DetailBottomBar></DetailBottomBar>
+  <DetailBottomBar @click.native="addToCart"></DetailBottomBar>
   </div>
 </template>
 
@@ -29,10 +29,10 @@ import DetailShopInfo from "./childcomps/DetailShopInfo";
 import DetailGoodsInfo from "./childcomps/DetailGoodsInfo";
 import DetailParamInfo from "./childcomps/DetailParamInfo";
 import DetailCommentInfo from "./childcomps/DetailCommentInfo";
-import BackTop from "components/content/backtop/BackTop";
 import DetailBottomBar from './childcomps/DetailBottomBar';
 
 import Scroll from "components/common/scroll/Scroll";
+import BackTop from "components/content/backtop/BackTop";
 import GoodsList from "components/content/goods/Goods";
 import {mixin} from 'common/mixin'
 
@@ -148,7 +148,19 @@ export default {
     },
     clicktop() {
       this.$refs.scroll.scrollTo(0,0,0)
-    }
+    },
+    addToCart() {
+        // 1.创建对象
+        const obj = {}
+        // 2.对象信息
+        obj.iid = this.iid;
+        obj.imgURL = this.topImages[0]
+        obj.title = this.goods.title
+        obj.desc = this.goods.desc;
+        obj.newPrice = this.goods.nowPrice;
+        // 3.添加到Store中
+        this.$store.commit('addCart', obj)
+      },
   },
 };
 </script>
