@@ -1,8 +1,17 @@
 <template>
   <div id="detail">
-    <DetailNavBar class="d_navbar" @titleClick="titleClick" ref="navbar"></DetailNavBar>
+    <DetailNavBar
+      class="d_navbar"
+      @titleClick="titleClick"
+      ref="navbar"
+    ></DetailNavBar>
 
-    <scroll class="content" ref="scroll" :probeType='3' @scroll="scrollPosition"> 
+    <scroll
+      class="content"
+      ref="scroll"
+      :probeType="3"
+      @scroll="scrollPosition"
+    >
       <DetailSwiper :images="topImages" @refresh="Torefresh"></DetailSwiper>
       <DetailInfo :goods="goods"></DetailInfo>
       <DetailShopInfo :shop="shop"></DetailShopInfo>
@@ -11,13 +20,15 @@
         @GimgLoad="Grefresh"
       ></DetailGoodsInfo>
       <DetailParamInfo :paramInfo="paramInfo" ref="paramInfo"></DetailParamInfo>
-      <DetailCommentInfo :commentInfo="commentInfo"  ref="commentInfo"></DetailCommentInfo>
+      <DetailCommentInfo
+        :commentInfo="commentInfo"
+        ref="commentInfo"
+      ></DetailCommentInfo>
       <GoodsList :goodsList="recommends" ref="goodsList"></GoodsList>
-
     </scroll>
 
-  <BackTop class="backtop" @click.native="clicktop" v-show="isShow"></BackTop>
-  <DetailBottomBar @click.native="addToCart"></DetailBottomBar>
+    <BackTop class="backtop" @click.native="clicktop" v-show="isShow"></BackTop>
+    <DetailBottomBar @click.native="addToCart"></DetailBottomBar>
   </div>
 </template>
 
@@ -29,12 +40,12 @@ import DetailShopInfo from "./childcomps/DetailShopInfo";
 import DetailGoodsInfo from "./childcomps/DetailGoodsInfo";
 import DetailParamInfo from "./childcomps/DetailParamInfo";
 import DetailCommentInfo from "./childcomps/DetailCommentInfo";
-import DetailBottomBar from './childcomps/DetailBottomBar';
+import DetailBottomBar from "./childcomps/DetailBottomBar";
 
 import Scroll from "components/common/scroll/Scroll";
 import BackTop from "components/content/backtop/BackTop";
 import GoodsList from "components/content/goods/Goods";
-import {mixin} from 'common/mixin'
+import { mixin } from "common/mixin";
 
 import {
   getDetail,
@@ -58,9 +69,9 @@ export default {
     DetailCommentInfo,
     GoodsList,
     BackTop,
-    DetailBottomBar
+    DetailBottomBar,
   },
-  mixins:[mixin],
+  mixins: [mixin],
   data() {
     return {
       iid: null,
@@ -72,10 +83,10 @@ export default {
       commentInfo: {},
       recommends: [],
       //newRefresh: null,
-      refresh:null,
-      offsetTopList:[],
-      nowCurrentIndex:null,
-      isShow:false
+      refresh: null,
+      offsetTopList: [],
+      nowCurrentIndex: null,
+      isShow: false,
     };
   },
   created() {
@@ -124,43 +135,45 @@ export default {
     this.refresh = debounce(this.$refs.scroll.refresh, 50);
   },
   destroyed() {
-    this.$bus.$off('imgLoad',this.newRefresh)
+    this.$bus.$off("imgLoad", this.newRefresh);
   },
   methods: {
     Torefresh() {
       this.$refs.scroll.refresh();
     },
     Grefresh() {
-      this.refresh()
+      this.refresh();
     },
     titleClick(index) {
       console.log(this.offsetTopList[index]);
-      this.$refs.scroll.scrollTo(0,-this.offsetTopList[index],0)
+      this.$refs.scroll.scrollTo(0, -this.offsetTopList[index], 0);
     },
     scrollPosition(position) {
-      this.isShow = -position.y > 1000
-      for(let i = 0; i < this.offsetTopList.length-1; i++) {
-        if( (-position.y > this.offsetTopList[i] && -position.y < this.offsetTopList[i+1])) {
-
-          this.$refs.navbar.currentIndex = i
+      this.isShow = -position.y > 1000;
+      for (let i = 0; i < this.offsetTopList.length - 1; i++) {
+        if (
+          -position.y > this.offsetTopList[i] &&
+          -position.y < this.offsetTopList[i + 1]
+        ) {
+          this.$refs.navbar.currentIndex = i;
         }
       }
     },
     clicktop() {
-      this.$refs.scroll.scrollTo(0,0,0)
+      this.$refs.scroll.scrollTo(0, 0, 0);
     },
     addToCart() {
-        // 1.创建对象
-        const obj = {}
-        // 2.对象信息
-        obj.iid = this.iid;
-        obj.imgURL = this.topImages[0]
-        obj.title = this.goods.title
-        obj.desc = this.goods.desc;
-        obj.newPrice = this.goods.nowPrice;
-        // 3.添加到Store中
-        this.$store.commit('addCart', obj)
-      },
+      // 1.创建对象
+      const obj = {};
+      // 2.对象信息
+      obj.iid = this.iid;
+      obj.imgURL = this.topImages[0];
+      obj.title = this.goods.title;
+      obj.desc = this.goods.desc;
+      obj.newPrice = this.goods.nowPrice;
+      // 3.添加到Store中
+      this.$store.dispatch("addCart", obj);
+    },
   },
 };
 </script>

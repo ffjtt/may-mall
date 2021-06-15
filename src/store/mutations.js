@@ -1,18 +1,12 @@
-const mutations = {
-    addCart(state,obj) {
-        let index = null
-        const exist = state.cartList.some(function(item,i) {
-            if(item.iid === obj.iid) {index = i}
-            return item.iid === obj.iid
-        })
+import {ADD_COUNTER,ADD_TO_CART} from './mutation_type'
 
-        if (exist) {
-            state.cartList[index].count+=1
-        } else {
-            state.cartList.push(obj)
-            state.cartList[state.cartList.length-1].count = 1
-        }
-        console.log(state.cartList);
+const mutations = {
+    [ADD_COUNTER](state,index) {
+        state.cartList[index].count+=1
+    },
+    [ADD_TO_CART](state,obj) {
+        state.cartList.push(obj)
+        state.cartList[state.cartList.length-1].count = 1
     }
 }
 

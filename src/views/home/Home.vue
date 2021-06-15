@@ -4,13 +4,13 @@
       <div slot="center">购物街</div>
     </nar-bar>
 
-    <tar-control 
-    class="tarcontrol"
-        :title="['流行', '新款', '爆款']"
-        @tarChange="tarChange"
-        v-show="tarControlShow"
-        ref="tarcontrol2"
-      ></tar-control>
+    <tar-control
+      class="tarcontrol"
+      :title="['流行', '新款', '爆款']"
+      @tarChange="tarChange"
+      v-show="tarControlShow"
+      ref="tarcontrol2"
+    ></tar-control>
 
     <scroll
       :pullUpLoad="true"
@@ -46,8 +46,8 @@ import Scroll from "components/common/scroll/Scroll";
 import BackTop from "components/content/backtop/BackTop";
 
 import { getHomeMultidata, getHomeGoods } from "network/home";
-import {debounce} from 'common/utils'
-import {mixin} from 'common/mixin'
+import { debounce } from "common/utils";
+import { mixin } from "common/mixin";
 export default {
   name: "Home",
   components: {
@@ -60,7 +60,7 @@ export default {
     Scroll,
     BackTop,
   },
-  mixins:[mixin],
+  mixins: [mixin],
   data() {
     return {
       bannersList: [
@@ -157,8 +157,8 @@ export default {
       current: "pop",
       isShow: false,
       tarControlShow: false,
-      offsetTop:0,
-      saveY:0,
+      offsetTop: 0,
+      saveY: 0,
       //newRefresh:null
     };
   },
@@ -178,15 +178,13 @@ export default {
           break;
         }
       }
-      this.$refs.tarcontrol1.currentIndex = index
-      this.$refs.tarcontrol2.currentIndex = index
+      this.$refs.tarcontrol1.currentIndex = index;
+      this.$refs.tarcontrol2.currentIndex = index;
     },
     getHomeMultidata() {
       getHomeMultidata().then((res) => {
-
         this.banners = res.data.banner.list;
         this.recommends = res.data.recommend.list;
-
       });
     },
     getHomeGoods(type) {
@@ -202,17 +200,17 @@ export default {
       this.getHomeGoods(this.current);
     },
     scroll(position) {
-      this.isShow = -position.y > 1000
-      this.tarControlShow = -position.y > this.offsetTop
-
+      this.isShow = -position.y > 1000;
+      this.tarControlShow = -position.y > this.offsetTop;
     },
     clicktop() {
       this.$refs.scroll.scrollTo(0, 0);
     },
 
     simgLoad() {
-      this.offsetTop = this.$refs.tarcontrol1.$el.offsetTop
-    }
+      this.offsetTop = this.$refs.tarcontrol1.$el.offsetTop;
+      console.log(this.offsetTop);
+    },
   },
   activated() {
     ///有问题
@@ -222,14 +220,13 @@ export default {
   deactivated() {
     ///有问题
     this.saveY = this.$refs.scroll.getScrollY();
-    this.$bus.$off("imgLoad",this.newRefresh)
+    this.$bus.$off("imgLoad", this.newRefresh);
   },
   created() {
     this.getHomeMultidata();
     this.getHomeGoods("pop");
     this.getHomeGoods("new");
     this.getHomeGoods("sell");
-
   },
   mounted() {
     //混入
