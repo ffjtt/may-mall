@@ -1,7 +1,7 @@
 <template>
   <div class="bottom_div">
     <div class="is_all">
-      <click-buttom :value=isAll class="click_buttom"></click-buttom>
+      <click-buttom :value=isAll class="click_buttom" ></click-buttom>
       <span>全选</span>
     </div>
     <div class="count">
@@ -26,7 +26,8 @@ export default {
     count:{
       type:Number,
       default:0
-    }
+    },
+    
   },
   components: {
     ClickButtom,
