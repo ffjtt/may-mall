@@ -6,7 +6,7 @@
 
     <cart-list :cartList='cartList'></cart-list>
 
-    <cart-bottom class="cart_bottom" :count="count" :amount="amount"></cart-bottom>
+    <cart-bottom class="cart_bottom" :count="count" :amount="amount" :cartList="cartList"></cart-bottom>
   </div>
 </template>
 

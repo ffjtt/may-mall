@@ -17,6 +17,8 @@
 
 <script>
 import ClickButtom from 'components/content/clickbuttom/ClickButtom'
+
+import {mapGetters} from 'vuex'
 export default {
   name: "CartListItem",
   components:{
@@ -33,9 +35,19 @@ export default {
   mounted() {
     
   },
+  computed:{
+    ...mapGetters(['cartList'])
+  },
   methods:{
     checkButtom() {
       this.product.check = !this.product.check
+      // this.$emit('isAllSelect',this.cartList.find((item)=>{
+      //   item.check == false
+      // }))
+      // console.log(this.cartList);
+      // console.log(this.cartList.find((item)=>{
+      //   item.check === false
+      // }));
     }
   }
 };

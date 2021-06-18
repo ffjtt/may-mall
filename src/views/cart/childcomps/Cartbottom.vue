@@ -1,7 +1,7 @@
 <template>
   <div class="bottom_div">
     <div class="is_all">
-      <click-buttom :value=isAll class="click_buttom" ></click-buttom>
+      <click-buttom :value=isAll class="click_buttom"  @click.native="isAllSelect" ></click-buttom>
       <span>全选</span>
     </div>
     <div class="count">
@@ -27,6 +27,10 @@ export default {
       type:Number,
       default:0
     },
+    cartList:{
+      type:Array,
+      default:[]
+    }
     
   },
   components: {
@@ -34,7 +38,32 @@ export default {
   },
   data() {
     return {
-      isAll:false
+      
+    }
+  },
+  methods: {
+    isAllSelect() {
+      let isSelectAll = this.$store.getters.cartList.filter(item => !item.checked).length;
+      console.log(isSelectAll);
+        // 2.有未选中的内容, 则全部选中
+        if (isSelectAll) {
+          this.$store.state.cartList.forEach(item => {
+            item.checked = true;
+          });
+          console.log(1);
+        } else {
+          this.$store.state.cartList.forEach(item => {
+            item.checked = false;
+          });
+          console.log(0);
+        }
+     
+    }
+  },
+  computed: {
+    isAll() {
+      console.log(this.$store.getters.cartList.find(item => item.checked === false) === undefined);
+      return this.$store.getters.cartList.find(item => item.checked === false) === undefined;
     }
   }
 };
