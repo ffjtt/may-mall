@@ -7,6 +7,64 @@
 </head>
 <body>
     <div></div>
+
+    <script>
+        const obj = {
+            name:18
+        }
+        //监听属性
+        Object.keys(obj).forEach(key => {
+            let value = obj[key]
+            Object.defineProperty(obj,key,{
+                set(newValue) {
+                    //dep.notify()
+                    console.log('监听' + key + '改变');
+                    value = newValue
+                },
+                get() {
+                    //const w1 = new Wather('张三')
+                    //dep.addSubs(w1)
+                    console.log('获取' + key +'的值');
+                    return value
+                }
+            })
+        })
+        //发布者订阅者模式
+        //发布者
+        class Dep {
+            constructor() {
+                this.subs = []
+            }
+            addSubs(wather) {
+                this.subs.push(wather)
+            }
+            notify() {
+                this.subs.forEach(item => {
+                    item.update()
+                })
+            }
+        }
+        //订阅者
+        class Watcher {
+            constructor(name) {
+                this.name = name
+            }
+            update () {
+                console.log('发生' + this.name + '更新');
+            }
+        }
+        //
+        const dep = new Dep()
+        
+        const w1 = new Wather('张三')
+        dep.addSubs(w1)
+        const w2 = new Wather('李四')
+        dep.addSubs(w2)
+        const w3 = new Wather('王五')
+        dep.addSubs(w3)
+        dep.notify()
+    </script>
+
 </body>
 <style>
     body {

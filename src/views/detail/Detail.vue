@@ -55,6 +55,7 @@ import {
   getRecommend,
 } from "network/detail";
 import { debounce } from "common/utils";
+import { mapActions } from "vuex";
 
 export default {
   name: "Detail",
@@ -138,6 +139,7 @@ export default {
     this.$bus.$off("imgLoad", this.newRefresh);
   },
   methods: {
+    ...mapActions(["addCart"]),
     Torefresh() {
       this.$refs.scroll.refresh();
     },
@@ -171,8 +173,12 @@ export default {
       obj.title = this.goods.title;
       obj.desc = this.goods.desc;
       obj.newPrice = this.goods.nowPrice;
+      obj.check = true;
+      obj.count = 1;
       // 3.添加到Store中
-      this.$store.dispatch("addCart", obj);
+      this.addCart(obj).then((res) => {
+        this.$toast.show(res, 1500);
+      });
     },
   },
 };

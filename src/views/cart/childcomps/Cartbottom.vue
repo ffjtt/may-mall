@@ -1,71 +1,66 @@
 <template>
   <div class="bottom_div">
     <div class="is_all">
-      <click-buttom :value=isAll class="click_buttom"  @click.native="isAllSelect" ></click-buttom>
+      <click-buttom
+        :value="isAll"
+        class="click_buttom"
+        @click.native="isAllSelect"
+      ></click-buttom>
       <span>全选</span>
     </div>
     <div class="count">
-      <span>总计：￥{{amount}}</span>
+      <span>总计：￥{{ amount }}</span>
     </div>
     <div class="go">
-      <span >去结算({{count}})</span>
+      <span>去结算({{ count }})</span>
     </div>
   </div>
 </template>
 
 <script>
 import ClickButtom from "components/content/clickbuttom/ClickButtom";
+import { mapGetters } from "vuex";
 
 export default {
   name: "CartBottom",
   props: {
-    amount:{
-      type:Number,
-      default:0
+    amount: {
+      type: Number,
+      default: 0,
     },
-    count:{
-      type:Number,
-      default:0
+    count: {
+      type: Number,
+      default: 0,
     },
-    cartList:{
-      type:Array,
-      default:[]
-    }
-    
   },
   components: {
     ClickButtom,
   },
   data() {
-    return {
-      
-    }
+    return {};
   },
   methods: {
     isAllSelect() {
-      let isSelectAll = this.$store.getters.cartList.filter(item => !item.checked).length;
-      console.log(isSelectAll);
-        // 2.有未选中的内容, 则全部选中
-        if (isSelectAll) {
-          this.$store.state.cartList.forEach(item => {
-            item.checked = true;
-          });
-          console.log(1);
-        } else {
-          this.$store.state.cartList.forEach(item => {
-            item.checked = false;
-          });
-          console.log(0);
-        }
-     
-    }
+      let isSelectAll = this.cartList.filter((item) => !item.check).length;
+
+      // 2.有未选中的内容, 则全部选中
+      if (isSelectAll) {
+        this.cartList.forEach((item) => {
+          item.check = true;
+        });
+      } else {
+        this.cartList.forEach((item) => {
+          item.check = false;
+        });
+      }
+    },
   },
   computed: {
+    ...mapGetters(["cartList"]),
     isAll() {
-      console.log(this.$store.getters.cartList.find(item => item.checked === false) === undefined);
-      return this.$store.getters.cartList.find(item => item.checked === false) === undefined;
-    }
-  }
+      return !this.cartList.find((item) => !item.check);
+    },
+  },
 };
 </script>
 
@@ -77,12 +72,11 @@ export default {
   font-size: 14px;
   background-color: rgba(245, 236, 217, 0.781);
 }
-.is_all{
+.is_all {
   width: 80px;
   position: relative;
-  
 }
-.is_all span{
+.is_all span {
   position: absolute;
   top: 1px;
   left: 30px;
