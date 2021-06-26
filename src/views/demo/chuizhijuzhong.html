@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- <div class="box1"></div> -->
+    <!-- <div class="box2"></div> -->
+    <!-- <div class="box3"></div> -->
+    <div class="box4"></div>
+    <div class="box5"></div>
+</body>
+<style>
+.box1 {
+    /* 知道元素大小(负外边距) */
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-top: -50px;
+    margin-left: -50px;
+    width: 100px;
+    height: 100px;
+    background-color: #555;
+}
+.box2 {
+    /* 不需要元素大小（css3位移） */
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    width: 100px;
+    height: 100px;
+    background-color: #555;
+}
+.box3 {
+    /* 不需要元素大小 */
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin:auto;
+    width: 100px;
+    height: 100px;
+    background-color: #555;
+}   
+ /* flex布局，不需要元素大小 */
+html {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.box4 {
+    width:100px;
+    height:100px;
+    background:#555; 
+}
+.box5 {
+    
+}
+
+</style>
+</html>

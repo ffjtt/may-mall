@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- 3.伪元素清楚浮动 -->
+    <div class="father clearfix">
+        <div class="son1"></div>
+        <div class="son2"></div>
+        <!-- 1.额外标签法 -->
+        <!-- <div class="clear"></div> -->
+    </div>
+    <div class="f-next"></div>
+</body>
+<style>
+.father {
+    background-color: #555;
+    /*2.父盒子超出隐藏*/
+    /* overflow: hidden; */
+}
+.son1 {
+    float: left;
+    height: 200px;
+    width: 200px;
+    background-color: red;
+}
+.son2 {
+    float: left;
+    height: 300px;
+    width: 300px;
+    background-color: #666;
+}
+.f-next {
+    width: 100px;height: 100px;
+    background-color: green;
+}
+/* .clear {
+    clear: both;
+} */
+.clearfix:after {  content: ""; display: block; height: 0; clear: both; visibility: hidden;  } 
+</style>
+</html>
