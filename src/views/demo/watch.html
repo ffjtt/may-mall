@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="root">
+    <p>obj.a: {{obj.a}}</p>
+    <p>obj.a: <input type="text" v-model="obj.a"></p>
+  </div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+  <script>
+    new Vue({
+  el: '#root',
+  data: {
+    obj: {
+      a: 123
+    }
+  },
+  watch: {
+    // obj: {
+    //   handler(newName, oldName) {
+    //      console.log('obj.a changed');
+    //   },
+    //   immediate: true,
+    //   deep:true
+    // }
+    a:{
+      handler(newa,olda) {
+        console.log('obj.a changed')
+      },
+      immediate:true
+    }
+  },
+  computed:{
+    a() {
+      return this.obj.a
+    }
+  }
+})
+  </script>
+  
+  
+</body>
+</html>
