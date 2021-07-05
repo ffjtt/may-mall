@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>节流函数</title>
+</head>
+<body>
+  <input id="input" type="text" >
+  <p id="p"></p>
+  
+  <script>
+    document.getElementById('input').addEventListener('input',inputChange)
+    const p = document.getElementById('p')
+
+    //input事件函数
+    function inputChange(event) {
+      var value = event.target.value
+      iThrottle(value)
+    }
+    
+    //p赋值函数
+    function pvalue(value) {
+      p.innerHTML = value
+    }
+
+    //节流函数
+      var iThrottle = throttle(pvalue, 500)
+      function throttle(fn, delay) {
+        var flag = true
+        return function (...value) {
+          if (flag) {
+            setTimeout(() => {
+              fn(value)
+              console.log(this);
+              flag = true
+            }, delay);
+          }
+          flag = false
+        }
+      }
+    
+  </script>
+</body>
+</html>
