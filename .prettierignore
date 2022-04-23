@@ -1,0 +1,4 @@
+//  Ignore aerifacts:
+dist
+build
+coverage

@@ -8,16 +8,16 @@
 </template>
 
 <script>
-import MainTarBar from 'components/content/maintarbar/MainTarBar'
+import MainTarBar from "components/content/maintarbar/MainTarBar";
 
 export default {
   name: "App",
   components: {
-    MainTarBar
-  }
+    MainTarBar,
+  },
 };
 </script>
 
 <style>
-@import 'assets/css/base.css'
+@import "assets/css/base.css";
 </style>
